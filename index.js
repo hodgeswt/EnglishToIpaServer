@@ -11,7 +11,9 @@ var bot = new MediaWiki.Bot({
 });
 
 app.get("/:word", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const word = req.params.word.toLowerCase().trim();
+  console.log(word);
   var text = "";
   bot
     .get({
@@ -30,7 +32,7 @@ app.get("/:word", (req, res) => {
         });
       }
       if (text && text == "") {
-        res.send("No pronunciation found");
+        res.send('{"error": "No pronunciation found"}');
       } else {
         const prons = text.match(/(\* \{\{.+)?\{\{IPA\|en\|.+\}\}/g);
         var target = "";
@@ -50,23 +52,23 @@ app.get("/:word", (req, res) => {
             }
           }
         } else {
-          res.send("No pronunciation found");
+          res.send('{"error": "No pronunciation found"}');
           return;
         }
 
         // Extract the IPA
         const ipa = target.match(/\{\{IPA\|en\|(.+)\}\}/);
         if (ipa) {
-          res.send(ipa[1].replaceAll("|", " "));
+          res.send(`{"success": "${ipa[1].replaceAll("|", " ")}"}`);
           return;
         } else {
-          res.send("No pronunciation found");
+          res.send('{"error": "No pronunciation found"}');
           return;
         }
       }
     })
     .error(function (err) {
-      res.send("No pronunciation found");
+      res.send('{"error": "No pronunciation found"}');
     });
 });
 

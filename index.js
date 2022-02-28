@@ -13,7 +13,6 @@ var bot = new MediaWiki.Bot({
 app.get("/:word", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   const word = req.params.word.toLowerCase().trim();
-  console.log(word);
   var text = "";
   bot
     .get({
@@ -72,6 +71,4 @@ app.get("/:word", (req, res) => {
     });
 });
 
-app.listen(port, () => {
-  console.log("Server running!");
-});
+app.listen(port, () => {});
